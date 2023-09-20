@@ -47,3 +47,8 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# hide examples folder
+/gtsummary_example
+/dryad_data
+/data
