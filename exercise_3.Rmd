@@ -20,7 +20,7 @@ library(ggfortify)
 library(tidyverse)
 library(gtsummary)
 library(gt)
-library(palmerpenguins)
+library(knitr)
 library(flextable)
 ```
 
@@ -37,10 +37,22 @@ climate <- mutate(climate, month=month(climate$date))
 #create column for year
 climate <- mutate(climate, year=year(climate$date))
 
-## create column for julian date
+#create column for julian date
 climate$julian_date <- yday(climate$date)
 
+#Load seedling data
 seedlings <- read_excel("data/seedlings.xlsx")
+
+#create column with the mean height
+seedlings <- seedlings %>% 
+  group_by(species) %>%
+  mutate(mean_height = mean(height))
+
+#create dataframe for SD  
+sd_seedlings <- seedlings %>%
+  group_by(species) %>%
+  summarize(mean_height = mean(height), 
+            seedling_sd=sd(height))
 ```
 
 ## [Table 1]{style="color:red"}
@@ -72,7 +84,24 @@ table1
 
 ```{table 1 plot}
 
-Table one plot goes here.
+table1_plot <-ggplot(data = climate, (aes(x=Year, y=meanTMAX, group = Year, colour = factor(Year)))) +
+  geom_point()+
+  geom_errorbar(aes(x= Year, ymin= meanTMAX-sd_tmax$TMAXsd, ymax=meanTMAX+sd_tmax$TMAXsd, group=Year, width= 0.5))+
+  ylab("Temperature (°C)")+
+  xlab("Year")+
+  labs(color = "Year")+
+  scale_x_continuous(breaks = c(2022, 2023))+
+  scale_fill_discrete(name="Year")+
+  theme_bw()+
+  theme(panel.border = element_blank(),  
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "black"),
+        axis.title.x = element_blank())+
+  ggtitle("Maximum Temperatures by Year")
+
+table1_plot
 
 ```
 ## [Table 2]{style="color:red"}
@@ -104,7 +133,21 @@ table2
 ```
 ```{table 2 plot}
 
-Table two plot goes here.
+table2_plot <- ggplot(data= seedlings, aes(x=species, y= height, group = species))+
+  geom_boxplot()+
+  geom_errorbar(aes(x= species, ymin= mean_height-sd_seedlings$seedling_sd, ymax=mean_height+sd_seedlings$seedling_sd, group=species, width= 0.5))+
+  ylab("Height (cm)")+
+  xlab("Species")+
+  theme_bw()+
+  theme(panel.border = element_blank(),  
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "black"),
+        axis.title.x = element_blank())+
+  ggtitle("Seedling height by species")
+
+table2_plot
 
 ```
 ## [Table 3]{style="color:red"}

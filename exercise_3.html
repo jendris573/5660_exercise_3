@@ -1653,7 +1653,24 @@ display: none;
   gt::tab_options(heading.align = &quot;left&quot;)
 table1</code></pre>
 <pre class="table"><code>
-Table one plot goes here.
+table1_plot &lt;-ggplot(data = climate, (aes(x=Year, y=meanTMAX, group = Year, colour = factor(Year)))) +
+  geom_point()+
+  geom_errorbar(aes(x= Year, ymin= meanTMAX-sd_tmax$TMAXsd, ymax=meanTMAX+sd_tmax$TMAXsd, group=Year, width= 0.5))+
+  ylab(&quot;Temperature (°C)&quot;)+
+  xlab(&quot;Year&quot;)+
+  labs(color = &quot;Year&quot;)+
+  scale_x_continuous(breaks = c(2022, 2023))+
+  scale_fill_discrete(name=&quot;Year&quot;)+
+  theme_bw()+
+  theme(panel.border = element_blank(),  
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = &quot;black&quot;),
+        axis.title.x = element_blank())+
+  ggtitle(&quot;Maximum Temperatures by Year&quot;)
+
+table1_plot
 </code></pre>
 </div>
 <div id="table-2" class="section level2">
@@ -1684,7 +1701,21 @@ greenhouse has other ideas…</p>
   gt::tab_options(heading.align = &quot;left&quot;)
 table2</code></pre>
 <pre class="table"><code>
-Table two plot goes here.
+table2_plot &lt;- ggplot(data= seedlings, aes(x=species, y= height, group = species))+
+  geom_boxplot()+
+  geom_errorbar(aes(x= species, ymin= mean_height-sd_seedlings$seedling_sd, ymax=mean_height+sd_seedlings$seedling_sd, group=species, width= 0.5))+
+  ylab(&quot;Height (cm)&quot;)+
+  xlab(&quot;Species&quot;)+
+  theme_bw()+
+  theme(panel.border = element_blank(),  
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = &quot;black&quot;),
+        axis.title.x = element_blank())+
+  ggtitle(&quot;Seedling height by species&quot;)
+
+table2_plot
 </code></pre>
 </div>
 <div id="table-3" class="section level2">
