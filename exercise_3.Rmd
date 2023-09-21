@@ -152,7 +152,7 @@ table2_plot
 ```
 ## [Table 3]{style="color:red"}
 
-Blurb here...
+And finally lets take a look to see if there are any differences in LT50 values when comparing before and after last freeze.
 
 ```{table 3}
 Table three
