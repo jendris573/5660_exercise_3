@@ -37,5 +37,6 @@ rsconnect/
 /gtsummary_example
 /dryad_data
 /data
+/images
 #test script
 *.R
