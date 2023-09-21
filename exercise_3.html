@@ -1652,10 +1652,9 @@ display: none;
   as_gt() %&gt;%
   gt::tab_options(heading.align = &quot;left&quot;)
 table1</code></pre>
-<pre class="table"><code>
-table1_plot &lt;-ggplot(data = climate, (aes(x=Year, y=meanTMAX, group = Year, colour = factor(Year)))) +
+<pre class="table"><code>table1_plot &lt;-ggplot(data = climate, (aes(x=Year, y=meanTMAX, group = Year, colour = factor(Year)))) +
   geom_point()+
-  geom_errorbar(aes(x= Year, ymin= meanTMAX-sd_tmax$TMAXsd, ymax=meanTMAX+sd_tmax$TMAXsd, group=Year, width= 0.5))+
+  geom_errorbar(aes(x= Year, ymin= meanTMAX-TMAXsd, ymax=meanTMAX+TMAXsd, group=Year, width= 0.5))+
   ylab(&quot;Temperature (°C)&quot;)+
   xlab(&quot;Year&quot;)+
   labs(color = &quot;Year&quot;)+
@@ -1668,10 +1667,7 @@ table1_plot &lt;-ggplot(data = climate, (aes(x=Year, y=meanTMAX, group = Year, c
         panel.background = element_blank(),
         axis.line = element_line(colour = &quot;black&quot;),
         axis.title.x = element_blank())+
-  ggtitle(&quot;Maximum Temperatures by Year&quot;)
-
-table1_plot
-</code></pre>
+  ggtitle(&quot;Maximum Temperatures by Year&quot;)</code></pre>
 </div>
 <div id="table-2" class="section level2">
 <h2><span style="color:red">Table 2</span></h2>

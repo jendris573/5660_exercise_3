@@ -38,5 +38,4 @@ rsconnect/
 /dryad_data
 /data
 /images
-#test script
-*.R
+

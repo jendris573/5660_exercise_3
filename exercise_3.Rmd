@@ -24,7 +24,7 @@ library(knitr)
 library(flextable)
 ```
 
-```{table data prep, include = FALSE}
+```{data prep, include = FALSE}
 #Load NOAA Climate Data Online data
 climate <- read_excel("data/climate.xlsx")
 
@@ -35,10 +35,16 @@ climate <- climate[complete.cases(climate[,6]),]
 climate <- mutate(climate, month=month(climate$date))
 
 #create column for year
-climate <- mutate(climate, year=year(climate$date))
+climate <- mutate(climate, Year=year(climate$date))
 
 #create column for julian date
 climate$julian_date <- yday(climate$date)
+
+#create column with the meanTMAX & SD
+climate <- climate %>% 
+  group_by(Year) %>%
+  mutate(meanTMAX = mean(TMAX)) %>%
+  mutate(TMAXsd=sd(TMAX))
 
 #Load seedling data
 seedlings <- read_excel("data/seedlings.xlsx")
@@ -94,10 +100,9 @@ table1
 ```
 
 ```{table 1 plot}
-
 table1_plot <-ggplot(data = climate, (aes(x=Year, y=meanTMAX, group = Year, colour = factor(Year)))) +
   geom_point()+
-  geom_errorbar(aes(x= Year, ymin= meanTMAX-sd_tmax$TMAXsd, ymax=meanTMAX+sd_tmax$TMAXsd, group=Year, width= 0.5))+
+  geom_errorbar(aes(x= Year, ymin= meanTMAX-TMAXsd, ymax=meanTMAX+TMAXsd, group=Year, width= 0.5))+
   ylab("Temperature (°C)")+
   xlab("Year")+
   labs(color = "Year")+
@@ -111,9 +116,6 @@ table1_plot <-ggplot(data = climate, (aes(x=Year, y=meanTMAX, group = Year, colo
         axis.line = element_line(colour = "black"),
         axis.title.x = element_blank())+
   ggtitle("Maximum Temperatures by Year")
-
-table1_plot
-
 ```
 ## [Table 2]{style="color:red"}
 In addition to measurements of bug and leaf tissue of adult trees, I intended to conduct a similar analysis on entire seedlings.  The greenhouse has other ideas...
