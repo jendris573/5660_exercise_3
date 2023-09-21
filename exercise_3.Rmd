@@ -24,7 +24,7 @@ library(knitr)
 library(flextable)
 ```
 
-```{data prep, include = FALSE}
+```{r data prep, include = FALSE}
 #Load NOAA Climate Data Online data
 climate <- read_excel("data/climate.xlsx")
 
@@ -76,10 +76,10 @@ LT50_sd <- LT50%>%
 
 Let start by comparing the mean high temperature for 2022 and 2023.
 
-```{table 1 climate}
+```{r table, echo=FALSE}
 table1 <- climate %>%
-  select(year, TMAX) %>%
-  tbl_summary(by = year,
+  select(Year, TMAX) %>%
+  tbl_summary(by = Year,
               missing= "no",
               digits = all_continuous() ~1,
               label = list(TMAX ~ "Temperature (°C)"),
@@ -99,7 +99,7 @@ table1 <- climate %>%
 table1
 ```
 
-```{table 1 plot}
+```{r table 1 plot, echo = FALSE}
 table1_plot <-ggplot(data = climate, (aes(x=Year, y=meanTMAX, group = Year, colour = factor(Year)))) +
   geom_point()+
   geom_errorbar(aes(x= Year, ymin= meanTMAX-TMAXsd, ymax=meanTMAX+TMAXsd, group=Year, width= 0.5))+
@@ -116,11 +116,17 @@ table1_plot <-ggplot(data = climate, (aes(x=Year, y=meanTMAX, group = Year, colo
         axis.line = element_line(colour = "black"),
         axis.title.x = element_blank())+
   ggtitle("Maximum Temperatures by Year")
-```
-## [Table 2]{style="color:red"}
-In addition to measurements of bug and leaf tissue of adult trees, I intended to conduct a similar analysis on entire seedlings.  The greenhouse has other ideas...
 
-```{table 2 seedlings}
+table1_plot
+```
+
+## [Table 2]{style="color:red"}
+
+In addition to measurements of bug and leaf tissue of adult trees, I
+intended to conduct a similar analysis on entire seedlings. The
+greenhouse has other ideas...
+
+```{r table 2 seedlings, echo = FALSE}
 table2 <- seedlings %>%
   select(species, height, mean_dia) %>%
   tbl_summary(by = species,
@@ -144,7 +150,8 @@ table2 <- seedlings %>%
   gt::tab_options(heading.align = "left")
 table2
 ```
-```{table 2 plot}
+
+```{r table 2 plot, echo = FALSE}
 
 table2_plot <- ggplot(data= seedlings, aes(x=species, y= height, group = species))+
   geom_boxplot()+
@@ -163,11 +170,13 @@ table2_plot <- ggplot(data= seedlings, aes(x=species, y= height, group = species
 table2_plot
 
 ```
+
 ## [Table 3]{style="color:red"}
 
-And finally lets take a look to see if there are any differences in LT50 values when comparing before and after last freeze.
+And finally lets take a look to see if there are any differences in LT50
+values when comparing before and after last freeze.
 
-```{table 3}
+```{r table 3, echo = FALSE}
 table3 <- LT50 %>%
   select(species, LT50) %>%
   tbl_summary(by = species,
@@ -193,7 +202,7 @@ table3 <- LT50 %>%
 table3
 ```
 
-```{table 3 plot}
+```{r table 3 plot, echo = FALSE}
 
 table3_plot <- ggplot(data= LT50_sd, aes(x=state, y= meanLT50, group = species, color = species))+
   geom_violin(trim = FALSE, position = position_dodge(width = 1))+
@@ -213,5 +222,5 @@ table3_plot <- ggplot(data= LT50_sd, aes(x=state, y= meanLT50, group = species, 
 table3_plot
 ```
 
-![**Fun Fact of the Day, J.R.R. Tolkien released *The Hobbit* on 21 September 1937!**](images/hobbit.jpg){width="50%"}
-
+![**Fun Fact of the Day, J.R.R. Tolkien released *The Hobbit* on 21
+September 1937!**](images/hobbit.jpg){width="50%"}
